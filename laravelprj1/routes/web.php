@@ -67,3 +67,24 @@ Route::get('/update2{id}', function($id){
 Route::get('/hapus/{id', function($id){
     echo "Data berhasil dihapus dengan ID: ". $id;
 });
+
+//Menampilkan Halaman Profil
+Route::get('/profil', function(){
+    return view("myprofile");
+});
+
+//Gunakan . untuk memisahkan folder dengan view
+//Route::get('/detailproduk', function(){
+//    return view("produk.detail");
+//});
+
+//Mengirim data ke view
+Route::get('/detailproduk/{name}', function($name){
+    return view("produk.detail",
+        ['product_name' => $name,
+        'id' => 101,
+        'color' => 'Silver',
+        'stock' => 12
+        ]
+    );
+});
