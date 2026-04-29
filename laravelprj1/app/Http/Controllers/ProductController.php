@@ -11,6 +11,8 @@ class ProductController extends Controller
      */
     public function index()
     {
+        $title = 'Daftar Produk';
+
         $products = [
             ['id' => 1, 'name' => 'Product 1', 'price' => 10.99],
             ['id' => 2, 'name' => 'Product 2', 'price' => 19.99],
@@ -18,7 +20,7 @@ class ProductController extends Controller
         ];
 
         //return view('produk.index', compact('products'));
-        return view('produk.index', ['products' => $products]);
+        return view('produk.index', ['products' => $products, 'title' => $title]);
     }
 
     /**

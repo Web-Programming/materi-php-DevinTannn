@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
 
 //Route ke halaman utama saya
 Route::get('/', function () {
@@ -89,21 +90,14 @@ Route::get('/detailproduk/{name}', function($name){
     );
 });
 
-Route::get('/produk', function(){
-    return view("produk.index");
-});
+Route::get('/produk', [ProductController::class, 'index']);
 
-Route::get('/produk/create', function(){
-    return view("produk.create");
-});
 
-Route::get('/produk/search', function(){
-    return view("produk.search");
-});
+Route::get('/produk/create', [ProductController::class, 'create']);
 
-Route::get('/produk/detail', function(){
-    return view("produk.detail");
-});
+Route::get('/produk/search', [ProductController::class, 'search']);
+
+Route::get('/produk/detail/{id}', [ProductController::class, 'show']);
 
 //Suplier
 Route::get('/supplier', function(){
