@@ -1,6 +1,6 @@
 @extends('app.master')
 
-@section('title', 'Produk Index')
+@section('title', $title)
 
 @section('sidebar')
     @parent
@@ -12,12 +12,30 @@
 @endsection
 
 @section('content')
-    <h1 class="h3 mb-3">Produk Index<h1>
-    <p class="text-muted">Halaman daftar produk menggunakan layout master.</p>
+    <div class="container-fluid">
+        <h1 class="mb-4">(( $title ))<h1>
 
-    <div class="card">
-        <div class="card-body">
-            Konten produk bisa ditampilkan di sini.
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Produk</th>
+                        <th>Harga</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for ($i = 0; $i < count($products); $i++)
+                        <tr>
+                            <td>{{ $i + 1 }}</td>
+                            <td>{{ $products[$i]['name'] }}</td>
+                            <td>{{ number_format($products[$i]['price'], 0, ',', '.') }}</td>
+                        </tr>
+                    @endfor
+                </tbody>
+            </table>
         </div>
     </div>
+
+    <div
 @endsection
