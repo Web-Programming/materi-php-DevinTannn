@@ -1,0 +1,16 @@
+@extends('template')
+@section('title','Ini Halaman Detail Produk')
+
+@section('navbar')
+    <b>Ini Bisa Diisi Navbar</b>    
+@endsection
+@section('content')
+    <h2>Ini halaman detail produk</h2>
+        Nama Produk : <b>{{ $product_name }}</b></br>
+        Id : <b>{{ $id }}</b>
+
+        <hr />
+        @for ($i = 0; $i < 5; $i++)
+            Data {{$i}} <br />
+        @endfor
+@endsection
