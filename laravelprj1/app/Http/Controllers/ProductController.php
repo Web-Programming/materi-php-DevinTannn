@@ -42,7 +42,9 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $title = 'Detail Produk';
+        $product = ['id' => 4, 'name' => 'Product ' . 'Computer', 'price' => 10.99];
+        return view('produk.detail', compact('id', 'product', 'title'));
     }
 
     /**
