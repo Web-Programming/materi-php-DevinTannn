@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
     /**
@@ -14,13 +14,16 @@ class ProductController extends Controller
         $title = 'Daftar Produk';
 
         $products = [
-            ['id' => 1, 'name' => 'Product 1', 'price' => 10.99],
-            ['id' => 2, 'name' => 'Product 2', 'price' => 19.99],
-            ['id' => 3, 'name' => 'Product 3', 'price' => 5.99],
+            ['id' => 1, 'name' => 'Laptop', 'price' => 25000000],
+            ['id' => 2, 'name' => 'Mouse', 'price' => 300000],
+            ['id' => 3, 'name' => 'Keyboard', 'price' => 500000],
         ];
+        //$products = product::all(); // cara 1
+        $products = DB::select('SELECT * FROM products'); //cara 2
+        //$products = DB::table('products')->get(); //cara 3
 
         //return view('produk.index', compact('products'));
-        return view('produk.index', ['products' => $products, 'title' => $title]);
+        return view('produk.index', compact('title', 'products'));
     }
 
     /**
