@@ -29,7 +29,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- {{-- @for ($i = 0; $i < count($products); $i++)
+                {{-- @for ($i = 0; $i < count($products); $i++)
                     <tr>
                         <td>{{ $i + 1 }}</td>
                         <td>{{ $products[$i]['name'] }}</td>
@@ -40,18 +40,18 @@
                                 class="btn btn-sm btn-primary">Edit</a>
                         </td>
                     </tr>
-                @endfor --}} -->
+                @endfor --}}
                 @foreach ($products as $item)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->name }}</td>
-                    <td>Rp {{ number_format($item->price, 2, ',', '.') }}</td>
-                    <td>
-                        <a href="{{ url('/produk/' . $item->id) }}" class="btn btn-sm btn-info">Detail</a>
-                        <a href="{{ url('/produk/' . $item->id . '/edit') }}"
-                            class="btn btn-sm btn-primary">Edit</a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $item->name }}</td>
+                        <td>Rp {{ number_format($item->price, 2, ',', '.') }}</td>
+                        <td>
+                            <a href="{{ url('/produk/' . $item->id) }}" class="btn btn-sm btn-info">Detail</a>
+                            <a href="{{ url('/produk/' . $item->id . '/edit') }}"
+                                class="btn btn-sm btn-primary">Edit</a>
+                        </td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>

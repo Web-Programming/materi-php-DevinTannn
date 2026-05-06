@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SupplierController;
 
 //Route ke halaman utama saya
 Route::get('/', function () {
@@ -80,28 +81,36 @@ Route::get('/profil', function(){
 //});
 
 //Mengirim data ke view
-Route::get('/detailproduk/{name}', function($name){
-    return view("produk.detail",
-        ['product_name' => $name,
-        'id' => 101,
-        'color' => 'Silver',
-        'stock' => 12
-        ]
-    );
-});
+// Route::get('/detailproduk/{name}', function($name){
+//     return view("produk.detail",
+//         ['product_name' => $name,
+//         'id' => 101,
+//         'color' => 'Silver',
+//         'stock' => 12
+//         ]
+//     );
+// });
 
-Route::get('/produk', [ProductController::class, 'index']);
+// Route::get('/produk', [ProductController::class, 'index']);
 
 
-Route::get('/produk/create', [ProductController::class, 'create']);
+// Route::get('/produk/create', [ProductController::class, 'create']);
 
-Route::get('/produk/search', [ProductController::class, 'search']);
+// Route::get('/produk/search', [ProductController::class, 'search']);
 
-Route::get('/produk/detail/{id}', [ProductController::class, 'show']);
+// Route::get('/produk/detail/{id}', [ProductController::class, 'show']);
+
+//php artisan make:controller ProductController --resource
+Route::resource('/produk', ProductController::class);
+Route::get('/produk/search', ProductController::class.'@search');
 
 //Suplier
 Route::get('/supplier', function(){
     return view("supplier.index");
 });
 
-//php artisan make:controller ProductController -r
+//php artisan make:controller SupplierController --resource
+Route::resource('/supplier', SupplierController::class);
+
+Route::resource('produk', ProductController::class);
+Route::resource('supplier', SupplierController::class);

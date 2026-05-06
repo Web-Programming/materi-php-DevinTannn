@@ -1,23 +1,52 @@
 @extends('app.master')
 
-@section('title', 'Supplier Index')
+@section('title', $title)
 
 @section('sidebar')
     @parent
-    @section('submenu-produk')
-        <a href="/supplier/create" class="list-group-item list-group-item-action ps-4>">Tambah Supplier</a>
-        <a href="/supplier/search" class="list-group-item list-group-item-action ps-4>">Cari Supplier</a>
-    @endsection
-
+@section('submenu-supplier')
+    <a href="/supplier/create"
+        class="list-group-item list-group-item-action ps-4 
+         {{ request()->is('supplier/create') ? 'active' : '' }}">Tambah
+        Supplier</a>
+    <a href="/supplier/search"
+        class="list-group-item list-group-item-action ps-4 
+         {{ request()->is('supplier/search') ? 'active' : '' }}">Cari
+        Supplier</a>
+@endsection
 @endsection
 
 @section('content')
-    <h1 class="h3 mb-3">Supplier Index<h1>
-    <p class="text-muted">Halaman daftar Supplier menggunakan layout master.</p>
+<div class="container-fluid">
+    <h1 class="mb-4">{{ $title }}</h1>
 
-    <div class="card">
-        <div class="card-body">
-            Konten produk bisa ditampilkan di sini.
-        </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>No</th>
+                    <th>Nama Supplier</th>
+                    <th>Telepon</th>
+                    <th>Alamat</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($suppliers as $index => $supplier)
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $supplier['name'] }}</td>
+                        <td>{{ $supplier['phone'] }}</td>
+                        <td>{{ $supplier['address'] }}</td>
+                        <td>
+                            <a href="{{ url('/supplier/' . $supplier['id']) }}" class="btn btn-sm btn-info">Detail</a>
+                            <a href="{{ url('/supplier/' . $supplier['id'] . '/edit') }}"
+                                class="btn btn-sm btn-primary">Edit</a>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
+</div>
 @endsection
