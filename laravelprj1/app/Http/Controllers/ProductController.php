@@ -4,75 +4,138 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Menampilkan daftar produk (Index)
      */
     public function index()
     {
         $title = 'Daftar Produk';
+        // Mengambil data dengan pagination
+        $products = DB::table('products')->paginate(10);
 
-        $products = [
-            ['id' => 1, 'name' => 'Laptop', 'price' => 25000000],
-            ['id' => 2, 'name' => 'Mouse', 'price' => 300000],
-            ['id' => 3, 'name' => 'Keyboard', 'price' => 500000],
-        ];
-        //$products = product::all(); // cara 1
-        $products = DB::select('SELECT * FROM products'); //cara 2
-        //$products = DB::table('products')->get(); //cara 3
-
-        //return view('produk.index', compact('products'));
         return view('produk.index', compact('title', 'products'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Menampilkan form untuk menambah produk (Create)
      */
-    public function create()
+    public function create() 
     {
-        //
+        $title = "Tambah Produk";
+        return view('produk.create', compact('title')); // pastikan 'produk.create' bukan 'product.create'
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Menyimpan produk baru ke database (Store)
      */
     public function store(Request $request)
     {
-        //
+        // Validasi input
+        $request->validate([
+            'name' => 'required|min:3',
+            'price' => 'required|numeric',
+        ]);
+
+        // Proses insert ke database
+        DB::table('products')->insert([
+            'name' => $request->name,
+            'price' => $request->price,
+            'description' => $request->description,
+            'status' => $request->status,
+            'is_active' => $request->has('is_active') ? 1 : 0,
+            'release_date' => $request->release_date,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->route('produk.index')->with('success', 'Produk berhasil ditambahkan!');
     }
 
     /**
-     * Display the specified resource.
+     * Menampilkan detail produk (Show)
      */
     public function show(string $id)
     {
         $title = 'Detail Produk';
-        $product = ['id' => 4, 'name' => 'Product ' . 'Computer', 'price' => 10.99];
-        return view('produk.detail', compact('id', 'product', 'title'));
+        $product = DB::table('products')->where('id', $id)->first();
+
+        if (!$product) {
+            abort(404);
+        }
+
+        return view('produk.detail', compact('title', 'product'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Menampilkan form edit produk (Edit)
      */
     public function edit(string $id)
     {
-        //
+        $title = 'Edit Produk';
+        $product = DB::table('products')->where('id', $id)->first();
+
+        if (!$product) {
+            abort(404);
+        }
+
+        return view('produk.edit', compact('title', 'product'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Memperbarui data produk di database (Update)
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'price' => 'required|numeric',
+        ]);
+
+        DB::table('products')->where('id', $id)->update([
+            'name' => $request->name,
+            'price' => $request->price,
+            'description' => $request->description,
+            'status' => $request->status,
+            'is_active' => $request->has('is_active') ? 1 : 0,
+            'release_date' => $request->release_date,
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->route('produk.index')->with('success', 'Data produk berhasil diperbarui!');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Menghapus produk (Destroy)
      */
     public function destroy(string $id)
     {
-        //
+        DB::table('products')->where('id', $id)->delete();
+        return redirect()->route('produk.index')->with('success', 'Produk berhasil dihapus!');
+    }
+
+    /**
+     * Mencari produk berdasarkan nama (Search)
+     */
+    public function search(Request $request)
+    {
+        $title = 'Pencarian Produk';
+        $keyword = $request->get('keyword');
+
+        // Jika ada keyword, cari. Jika tidak, kirim koleksi kosong.
+        if ($keyword) {
+            $products = DB::table('products')
+                ->where('name', 'like', "%" . $keyword . "%")
+                ->paginate(10)
+                ->withQueryString();
+        } else {
+            // Membuat paginator kosong agar tidak error di view
+            $products = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+        }
+
+        // Arahkan ke view produk.search, bukan produk.index
+        return view('produk.search', compact('title', 'products'));
     }
 }

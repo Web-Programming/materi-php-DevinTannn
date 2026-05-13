@@ -3,109 +3,138 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class SupplierController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Menampilkan daftar semua supplier (Index)
      */
     public function index()
     {
-        $suppliers = [
-            [
-                'id' => 1,
-                'name' => 'PT Sumber Makmur',
-                'phone' => '021-12345678',
-                'address' => 'Jl. Sudirman No. 123, Jakarta Pusat'
-            ],
-            [
-                'id' => 2,
-                'name' => 'CV Mitra Jaya',
-                'phone' => '022-87654321',
-                'address' => 'Jl. Raya Bandung No. 45, Bandung'
-            ],
-            [
-                'id' => 3,
-                'name' => 'UD Sejahtera Bersama',
-                'phone' => '031-11223344',
-                'address' => 'Jl. Pemuda No. 67, Surabaya'
-            ],
-            [
-                'id' => 4,
-                'name' => 'PT Global Supplier',
-                'phone' => '024-99887766',
-                'address' => 'Jl. Pandanaran No. 89, Semarang'
-            ],
-            [
-                'id' => 5,
-                'name' => 'CV Cahaya Abadi',
-                'phone' => '0274-556677',
-                'address' => 'Jl. Malioboro No. 12, Yogyakarta'
-            ]
-        ];
+        $title = 'Daftar Supplier';
+        // Ambil data supplier dengan pagination 10 data per halaman
+        $suppliers = DB::table('suppliers')->paginate(10);
 
-        return view('supplier.index', [
-            'title' => 'Daftar Supplier',
-            'suppliers' => $suppliers
-        ]);
+        return view('supplier.index', compact('title', 'suppliers'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Menampilkan form untuk menambah supplier baru (Create)
      */
     public function create()
     {
-        //
+        $title = 'Tambah Supplier Baru';
+        return view('supplier.create', compact('title'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Menyimpan data supplier baru ke database (Store)
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        $supplier = [
-            'id' => $id,
-            'name' => 'PT Sumber Makmur',
-            'phone' => '021-12345678',
-            'address' => 'Jl. Sudirman No. 123, Jakarta Pusat'
-        ];
-
-        return view('supplier.detail', [
-            'id' => $id,
-            'title' => 'Detail Supplier',
-            'supplier' => $supplier
+        // Validasi input
+        $request->validate([
+            'name' => 'required|min:3',
+            'phone' => 'required',
+            'address' => 'required',
         ]);
+
+        // Simpan ke database
+        DB::table('suppliers')->insert([
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->route('supplier.index')->with('success', 'Supplier berhasil ditambahkan!');
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Mencari supplier berdasarkan nama atau telepon di halaman terpisah (Search)
      */
-    public function edit(string $id)
+    public function search(Request $request)
     {
-        //
+        $title = 'Pencarian Supplier';
+        $keyword = $request->get('keyword');
+
+        if ($keyword) {
+            $suppliers = DB::table('suppliers')
+                ->where('name', 'like', "%" . $keyword . "%")
+                ->orWhere('phone', 'like', "%" . $keyword . "%")
+                ->paginate(10)
+                ->withQueryString();
+        } else {
+            // Jika keyword kosong, kirim pagination kosong agar view tidak error
+            $suppliers = new LengthAwarePaginator([], 0, 10);
+        }
+
+        return view('supplier.search', compact('title', 'suppliers'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Menampilkan detail lengkap satu supplier (Show)
      */
-    public function update(Request $request, string $id)
+    public function show($id)
     {
-        //
+        $title = 'Detail Supplier';
+        $supplier = DB::table('suppliers')->where('id', $id)->first();
+
+        if (!$supplier) {
+            abort(404);
+        }
+
+        return view('supplier.show', compact('title', 'supplier'));
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Menampilkan form untuk mengedit data supplier (Edit)
      */
-    public function destroy(string $id)
+    public function edit($id)
     {
-        //
+        $title = 'Edit Supplier';
+        $supplier = DB::table('suppliers')->where('id', $id)->first();
+
+        if (!$supplier) {
+            abort(404);
+        }
+
+        return view('supplier.edit', compact('title', 'supplier'));
+    }
+
+    /**
+     * Memperbarui data supplier di database (Update)
+     */
+    public function update(Request $request, $id)
+    {
+        // Validasi data yang diubah
+        $request->validate([
+            'name' => 'required|min:3',
+            'phone' => 'required',
+            'address' => 'required',
+        ]);
+
+        // Proses update
+        DB::table('suppliers')->where('id', $id)->update([
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->route('supplier.index')->with('success', 'Data supplier berhasil diperbarui!');
+    }
+
+    /**
+     * Menghapus data supplier dari database (Destroy)
+     */
+    public function destroy($id)
+    {
+        DB::table('suppliers')->where('id', $id)->delete();
+
+        return redirect()->route('supplier.index')->with('success', 'Supplier berhasil dihapus!');
     }
 }

@@ -100,17 +100,10 @@ Route::get('/profil', function(){
 
 // Route::get('/produk/detail/{id}', [ProductController::class, 'show']);
 
-//php artisan make:controller ProductController --resource
-Route::resource('/produk', ProductController::class);
-Route::get('/produk/search', ProductController::class.'@search');
+// 1. Taruh rute search DI ATAS resource
+Route::get('/produk/search', [ProductController::class, 'search'])->name('produk.search');
+Route::get('/supplier/search', [SupplierController::class, 'search'])->name('supplier.search');
 
-//Suplier
-Route::get('/supplier', function(){
-    return view("supplier.index");
-});
-
-//php artisan make:controller SupplierController --resource
-Route::resource('/supplier', SupplierController::class);
-
+// 2. Resource mencakup (index, create, store, show, edit, update, destroy)
 Route::resource('produk', ProductController::class);
 Route::resource('supplier', SupplierController::class);
