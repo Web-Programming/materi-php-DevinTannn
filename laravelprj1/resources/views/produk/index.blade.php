@@ -4,7 +4,6 @@
 
 @section('sidebar')
     @parent
-    {{-- Memastikan submenu terisi ke sidebar di master --}}
     @section('submenu-produk')
         <a href="{{ route('produk.create') }}" class="list-group-item list-group-item-action ps-4 {{ request()->is('produk/create') ? 'active' : '' }}">
             <i class="fas fa-plus-circle me-2"></i>Tambah Produk
@@ -18,8 +17,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0 text-gray-800">{{ $title }}</h1>
-        {{-- Tombol Tambah di bagian atas tabel juga --}}
+        <h1 class="h3 mb-0 text-gray-800">{{ $title }}</h1
         <a href="{{ route('produk.create') }}" class="btn btn-primary shadow-sm">
             <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Produk Baru
         </a>
@@ -47,7 +45,6 @@
                     <tbody>
                         @forelse ($products as $item)
                         <tr>
-                            {{-- Perbaikan nomor otomatis berdasarkan pagination --}}
                             <td>{{ ($products->currentPage() - 1) * $products->perPage() + $loop->iteration }}</td>
                             <td>{{ $item->name }}</td>
                             <td>Rp {{ number_format($item->price, 0, ',', '.') }}</td>
@@ -83,7 +80,6 @@
                     Menampilkan {{ $products->firstItem() ?? 0 }} sampai {{ $products->lastItem() ?? 0 }} dari {{ $products->total() }} produk
                 </small>
                 <div>
-                    {{-- Pastikan AppServiceProvider sudah diset Paginator::useBootstrapFive() --}}
                     {{ $products->links() }}
                 </div>
             </div>

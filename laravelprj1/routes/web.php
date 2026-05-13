@@ -6,9 +6,8 @@ use App\Http\Controllers\SupplierController;
 
 //Route ke halaman utama saya
 Route::get('/', function () {
-    echo "Halo, nama saya Devin Tan";
-    //return view('welcome');
-});
+    return view('dashboard');
+})->name('dashboard');
 
 //Route ke halaman alamat
 Route::get('/alamat', function(){

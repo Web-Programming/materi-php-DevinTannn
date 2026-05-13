@@ -2,20 +2,31 @@
 
 @section('title', $title)
 
+@section('sidebar')
+    @parent
+    @section('submenu-produk')
+        <a href="{{ route('produk.create') }}" class="list-group-item list-group-item-action ps-4 {{ request()->is('produk/create') ? 'active' : '' }}">
+            <i class="fas fa-plus-circle me-2"></i>Tambah Produk
+        </a>
+        <a href="{{ route('produk.search') }}" class="list-group-item list-group-item-action ps-4 {{ request()->is('produk/search') ? 'active' : '' }}">
+            <i class="fas fa-search me-2"></i>Cari Produk
+        </a>
+    @endsection
+@endsection
+
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>{{ $title }}</h1>
-        <a href="{{ route('produk.index') }}" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Kembali
+        <h1 class="h3 mb-0 text-gray-800">{{ $title }}</h1>
+        <a href="{{ route('produk.index') }}" class="btn btn-secondary shadow-sm">
+            <i class="fas fa-arrow-left fa-sm"></i> Kembali
         </a>
     </div>
 
     <div class="card shadow-sm">
         <div class="card-body">
-            {{-- Bagian form action mengarah ke produk.store --}}
             <form action="{{ route('produk.store') }}" method="POST">
-                @csrf {{-- Token keamanan wajib Laravel --}}
+                @csrf 
 
                 <div class="mb-3">
                     <label class="form-label font-weight-bold">Nama Produk</label>
@@ -65,7 +76,7 @@
                     <div class="col-md-6 mb-3 d-flex align-items-end">
                         <div class="form-check mb-2">
                             <input type="checkbox" name="is_active" class="form-check-input" id="is_active" 
-                                   {{ old('is_active') ? '' : 'checked' }}>
+                                   {{ old('is_active', '1') ? 'checked' : '' }}>
                             <label class="form-check-label" for="is_active">
                                 Produk Aktif dan Ditampilkan
                             </label>

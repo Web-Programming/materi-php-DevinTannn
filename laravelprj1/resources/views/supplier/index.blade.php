@@ -4,7 +4,6 @@
 
 @section('sidebar')
     @parent
-    {{-- Memastikan submenu terisi ke sidebar di master --}}
     @section('submenu-supplier')
         <a href="{{ route('supplier.create') }}" class="list-group-item list-group-item-action ps-4 {{ request()->is('supplier/create') ? 'active' : '' }}">
             <i class="fas fa-plus-circle me-2"></i>Tambah Supplier
@@ -48,9 +47,8 @@
                     <tbody>
                         @forelse ($suppliers as $supplier)
                         <tr>
-                            {{-- Perbaikan nomor otomatis berdasarkan pagination --}}
                             <td>{{ ($suppliers->currentPage() - 1) * $suppliers->perPage() + $loop->iteration }}</td>
-                            <td><strong>{{ $supplier->name }}</strong></td>
+                            <td>{{ $supplier->name }}</td>
                             <td>{{ $supplier->phone }}</td>
                             <td>{{ $supplier->address ?? '-' }}</td>
                             <td class="text-center">
