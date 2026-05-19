@@ -37,14 +37,28 @@
                     @enderror
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label font-weight-bold">No. Telepon</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                        <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" 
-                               placeholder="Contoh: 08123456789" value="{{ old('phone') }}">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label font-weight-bold">No. Telepon</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                            <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" 
+                                   placeholder="Contoh: 08123456789" value="{{ old('phone') }}">
+                        </div>
                         @error('phone')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label font-weight-bold">Email Supplier</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" 
+                                   placeholder="Contoh: supplier@toko.com" value="{{ old('email') }}">
+                        </div>
+                        @error('email')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
@@ -69,4 +83,4 @@
         </div>
     </div>
 </div>
-@endsection 
+@endsection

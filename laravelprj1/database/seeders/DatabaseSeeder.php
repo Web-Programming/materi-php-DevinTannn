@@ -21,7 +21,10 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-        // 2. Panggil ProductSeeder yang sudah kita perbaiki di atas
-        $this->call(ProductSeeder::class);
+        // 2. Panggil Seeder untuk Produk dan Supplier secara berurutan
+        $this->call([
+            ProductSeeder::class,
+            SupplierSeeder::class, // 👈 FIX: Menambahkan SupplierSeeder ke dalam daftar panggilan otomatis
+        ]);
     }
 }

@@ -34,16 +34,18 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        // Validasi input
+        // 1. FIX: Menambahkan validasi untuk email (boleh kosong/nullable, tapi jika diisi format harus email dan unik)
         $request->validate([
             'name' => 'required|min:3',
+            'email' => 'nullable|email|unique:suppliers,email',
             'phone' => 'required',
             'address' => 'required',
         ]);
 
-        // Simpan ke database
+        // 2. FIX: Menyertakan request email untuk dimasukkan ke database
         DB::table('suppliers')->insert([
             'name' => $request->name,
+            'email' => $request->email, 
             'phone' => $request->phone,
             'address' => $request->address,
             'created_at' => now(),
@@ -54,7 +56,7 @@ class SupplierController extends Controller
     }
 
     /**
-     * Mencari supplier berdasarkan nama atau telepon di halaman terpisah (Search)
+     * Mencari supplier berdasarkan nama, telepon, atau email di halaman terpisah (Search)
      */
     public function search(Request $request)
     {
@@ -62,9 +64,11 @@ class SupplierController extends Controller
         $keyword = $request->get('keyword');
 
         if ($keyword) {
+            // FIX: Menambahkan fitur pencarian berdasarkan email juga agar makin fungsional
             $suppliers = DB::table('suppliers')
                 ->where('name', 'like', "%" . $keyword . "%")
                 ->orWhere('phone', 'like', "%" . $keyword . "%")
+                ->orWhere('email', 'like', "%" . $keyword . "%")
                 ->paginate(10)
                 ->withQueryString();
         } else {
@@ -110,16 +114,18 @@ class SupplierController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Validasi data yang diubah
+        // 1. FIX: Menambahkan validasi email pada proses update, abaikan keunikan untuk ID supplier ini sendiri
         $request->validate([
             'name' => 'required|min:3',
+            'email' => 'nullable|email|unique:suppliers,email,' . $id,
             'phone' => 'required',
             'address' => 'required',
         ]);
 
-        // Proses update
+        // 2. FIX: Menyertakan update data email ke database
         DB::table('suppliers')->where('id', $id)->update([
             'name' => $request->name,
+            'email' => $request->email,
             'phone' => $request->phone,
             'address' => $request->address,
             'updated_at' => now(),
