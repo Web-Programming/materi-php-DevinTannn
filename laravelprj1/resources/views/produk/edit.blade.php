@@ -17,7 +17,6 @@
                 @csrf
                 @method('PUT')
 
-                <!-- Nama Produk -->
                 <div class="mb-3">
                     <label class="form-label font-weight-bold">Nama Produk</label>
                     <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
@@ -28,7 +27,6 @@
                 </div>
 
                 <div class="row">
-                    <!-- Harga -->
                     <div class="col-md-6 mb-3">
                         <label class="form-label font-weight-bold">Harga</label>
                         <div class="input-group">
@@ -41,7 +39,6 @@
                         @enderror
                     </div>
 
-                    <!-- Tanggal Rilis -->
                     <div class="col-md-6 mb-3">
                         <label class="form-label font-weight-bold">Tanggal Rilis</label>
                         <input type="date" name="release_date" class="form-control @error('release_date') is-invalid @enderror"
@@ -52,7 +49,6 @@
                     </div>
                 </div>
 
-                <!-- Deskripsi -->
                 <div class="mb-3">
                     <label class="form-label font-weight-bold">Deskripsi</label>
                     <textarea name="description" rows="3"
@@ -63,8 +59,7 @@
                 </div>
 
                 <div class="row">
-                    <!-- Status -->
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label font-weight-bold">Status</label>
                         <select name="status" class="form-select">
                             <option value="new" {{ old('status', $product->status) == 'new' ? 'selected' : '' }}>New</option>
@@ -72,10 +67,18 @@
                         </select>
                     </div>
 
-                    <!-- Is Active -->
-                    <div class="col-md-6 mb-3 d-flex align-items-end">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label font-weight-bold">Stok Produk</label>
+                        <input type="number" name="stock" class="form-control @error('stock') is-invalid @enderror"
+                            value="{{ old('stock', $product->stock) }}" min="0">
+                        @error('stock')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-4 mb-3 d-flex align-items-end">
                         <div class="form-check mb-2">
-                            <input type="checkbox" name="is_active" class="form-check-input" id="is_active" 
+                            <input type="checkbox" name="is_active" class="form-check-input" id="is_active" value="1"
                                 {{ old('is_active', $product->is_active) ? 'checked' : '' }}>
                             <label class="form-check-label" for="is_active">Produk Aktif / Dijual</label>
                         </div>

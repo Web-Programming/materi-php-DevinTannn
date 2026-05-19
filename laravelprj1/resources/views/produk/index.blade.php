@@ -17,7 +17,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0 text-gray-800">{{ $title }}</h1
+        <h1 class="h3 mb-0 text-gray-800">{{ $title }}</h1>
         <a href="{{ route('produk.create') }}" class="btn btn-primary shadow-sm">
             <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Produk Baru
         </a>
@@ -39,6 +39,8 @@
                             <th width="50">No</th>
                             <th>Nama Produk</th>
                             <th>Harga</th>
+                            <th>Stok</th> {{-- Tambahan Header Kolom Stok --}}
+                            <th>Status</th> 
                             <th width="200" class="text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -48,6 +50,18 @@
                             <td>{{ ($products->currentPage() - 1) * $products->perPage() + $loop->iteration }}</td>
                             <td>{{ $item->name }}</td>
                             <td>Rp {{ number_format($item->price, 0, ',', '.') }}</td>
+                            
+                            {{-- Menampilkan jumlah stok bawaan database --}}
+                            <td>{{ $item->stock }} pcs</td>
+                            
+                            <td>
+                                {{-- Status otomatis sinkron dengan jumlah stok --}}
+                                @if($item->stock > 0)
+                                    <span class="badge bg-success">Tersedia</span>
+                                @else
+                                    <span class="badge bg-danger">Habis</span>
+                                @endif
+                            </td>
                             <td class="text-center">
                                 <div class="btn-group" role="group">
                                     <a href="{{ route('produk.show', $item->id) }}" class="btn btn-sm btn-info text-white">
@@ -68,7 +82,8 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="text-center py-4 text-muted">Data produk tidak ditemukan.</td>
+                            {{-- Colspan diubah ke 6 karena sekarang total ada 6 kolom di bagian atas --}}
+                            <td colspan="6" class="text-center py-4 text-muted">Data produk tidak ditemukan.</td>
                         </tr>
                         @endforelse
                     </tbody>

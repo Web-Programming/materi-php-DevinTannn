@@ -8,14 +8,28 @@ use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
     /**
-     * Menampilkan daftar produk (Index)
+     * Menampilkan daftar produk (Index) + Fitur Filter dari Dashboard
      */
-    public function index()
+    public function index(Request $request)
     {
         $title = 'Daftar Produk';
-        // Mengambil data dengan pagination
-        $products = DB::table('products')->paginate(10);
+        
+        // 1. Mulai query dasar dari tabel products
+        $query = DB::table('products');
 
+        // 2. Cek apakah ada kiriman filter status dari link Dashboard (?status=...)
+        if ($request->has('status')) {
+            if ($request->status == 'tersedia') {
+                $query->where('status', 1);
+            } elseif ($request->status == 'habis') {
+                $query->where('status', 0);
+            }
+        }
+
+        // 3. Mengambil data dengan pagination (dan mempertahankan query string status di URL)
+        $products = $query->paginate(10)->withQueryString();
+
+        // 4. Mengembalikan data ke view
         return view('produk.index', compact('title', 'products'));
     }
 
@@ -25,7 +39,7 @@ class ProductController extends Controller
     public function create() 
     {
         $title = "Tambah Produk";
-        return view('produk.create', compact('title')); // pastikan 'produk.create' bukan 'product.create'
+        return view('produk.create', compact('title'));
     }
 
     /**
@@ -33,18 +47,23 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // Validasi input
+        // 1. Validasi input (Wajib mengisi stock minimal angka 0)
         $request->validate([
             'name' => 'required|min:3',
             'price' => 'required|numeric',
+            'stock' => 'required|numeric|min:0',
         ]);
 
-        // Proses insert ke database
+        // 2. Tentukan status otomatis berdasarkan kuantitas stok
+        $statusOtomatis = $request->stock > 0 ? 1 : 0;
+
+        // 3. Proses insert ke database
         DB::table('products')->insert([
             'name' => $request->name,
             'price' => $request->price,
+            'stock' => $request->stock, // Kolom stock ditambahkan
             'description' => $request->description,
-            'status' => $request->status,
+            'status' => $statusOtomatis, // Nilai status otomatis dari pengecekan stok
             'is_active' => $request->has('is_active') ? 1 : 0,
             'release_date' => $request->release_date,
             'created_at' => now(),
@@ -89,16 +108,23 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // 1. Validasi input data saat perubahan dilakukan
         $request->validate([
             'name' => 'required',
             'price' => 'required|numeric',
+            'stock' => 'required|numeric|min:0',
         ]);
 
+        // 2. Hitung ulang status otomatis berdasarkan nilai stok baru
+        $statusOtomatis = $request->stock > 0 ? 1 : 0;
+
+        // 3. Proses update ke database
         DB::table('products')->where('id', $id)->update([
             'name' => $request->name,
             'price' => $request->price,
+            'stock' => $request->stock, // Kolom stock diupdate
             'description' => $request->description,
-            'status' => $request->status,
+            'status' => $statusOtomatis, // Nilai status ikut disesuaikan otomatis
             'is_active' => $request->has('is_active') ? 1 : 0,
             'release_date' => $request->release_date,
             'updated_at' => now(),
@@ -124,18 +150,15 @@ class ProductController extends Controller
         $title = 'Pencarian Produk';
         $keyword = $request->get('keyword');
 
-        // Jika ada keyword, cari. Jika tidak, kirim koleksi kosong.
         if ($keyword) {
             $products = DB::table('products')
                 ->where('name', 'like', "%" . $keyword . "%")
                 ->paginate(10)
                 ->withQueryString();
         } else {
-            // Membuat paginator kosong agar tidak error di view
             $products = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
         }
 
-        // Arahkan ke view produk.search, bukan produk.index
         return view('produk.search', compact('title', 'products'));
     }
 }

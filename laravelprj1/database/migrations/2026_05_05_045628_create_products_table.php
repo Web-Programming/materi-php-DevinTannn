@@ -14,12 +14,15 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
-            $table->decimal('price',10,2);
+            $table->decimal('price', 10, 2);
+            $table->integer('stock')->default(0); // Kolom stock digabung di sini
             $table->text('description')->nullable();
-            $table->enum('status',['new', 'used'])->default('new');
+            
+            // Menggunakan tinyInteger (1 = tersedia, 0 = habis) agar cocok dengan logika controller & index
+            $table->tinyInteger('status')->default(0); 
+            
             $table->boolean('is_active')->default(true);
             $table->date('release_date')->nullable();
-            //Menambahkan kolom created_at dan update_at secara otomatis
             $table->timestamps();
         });
     }

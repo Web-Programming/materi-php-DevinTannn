@@ -44,11 +44,12 @@
                             <span class="input-group-text">Rp</span>
                             <input type="number" name="price" class="form-control @error('price') is-invalid @enderror" 
                                    placeholder="0" value="{{ old('price') }}">
-                            @error('price')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
                         </div>
+                        @error('price')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
                     </div>
+
                     <div class="col-md-6 mb-3">
                         <label class="form-label font-weight-bold">Tanggal Rilis</label>
                         <input type="date" name="release_date" class="form-control @error('release_date') is-invalid @enderror" 
@@ -61,21 +62,34 @@
 
                 <div class="mb-3">
                     <label class="form-label font-weight-bold">Deskripsi</label>
-                    <textarea name="description" class="form-control" rows="3" 
+                    <textarea name="description" class="form-control @error('description') is-invalid @enderror" rows="3" 
                               placeholder="Tambahkan keterangan produk...">{{ old('description') }}</textarea>
+                    @error('description')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label font-weight-bold">Status</label>
                         <select name="status" class="form-select">
                             <option value="new" {{ old('status') == 'new' ? 'selected' : '' }}>Baru (New)</option>
                             <option value="used" {{ old('status') == 'used' ? 'selected' : '' }}>Bekas (Used)</option>
                         </select>
                     </div>
-                    <div class="col-md-6 mb-3 d-flex align-items-end">
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label font-weight-bold">Stok Awal</label>
+                        <input type="number" name="stock" class="form-control @error('stock') is-invalid @enderror" 
+                               placeholder="Contoh: 10" value="{{ old('stock') }}" min="0">
+                        @error('stock')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-4 mb-3 d-flex align-items-end">
                         <div class="form-check mb-2">
-                            <input type="checkbox" name="is_active" class="form-check-input" id="is_active" 
+                            <input type="checkbox" name="is_active" class="form-check-input" id="is_active" value="1"
                                    {{ old('is_active', '1') ? 'checked' : '' }}>
                             <label class="form-check-label" for="is_active">
                                 Produk Aktif dan Ditampilkan
