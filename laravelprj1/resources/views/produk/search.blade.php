@@ -4,20 +4,26 @@
 
 @section('sidebar')
     @parent
-    {{-- Memastikan urutan submenu tetap: Tambah baru Cari --}}
     @section('submenu-produk')
-        {{-- Tombol Tambah Produk --}}
-        <a href="{{ route('produk.create') }}" class="list-group-item list-group-item-action ps-4 {{ request()->is('produk/create') ? 'active' : '' }}">
-            <i class="fas fa-plus-circle me-2"></i>Tambah Produk
-        </a>
-        {{-- Tombol Cari Produk (Biru karena kita di halaman search) --}}
-        <a href="{{ route('produk.search') }}" class="list-group-item list-group-item-action ps-4 {{ request()->is('produk/search') ? 'active' : '' }}">
-            <i class="fas fa-search me-2"></i>Cari Produk
+        {{-- Sub-menu Tambah Produk --}}
+        @can('create-products')
+            <a href="{{ route('produk.create') }}" 
+               class="list-group-item list-group-item-action ps-4 border-bottom {{ request()->is('produk/create') ? 'bg-body-secondary text-primary fw-bold' : 'text-muted' }}">
+                <i class="fas fa-plus-circle me-2"></i>Tambah Produk
+            </a>
+        @endcan
+
+        {{-- Sub-menu Cari Produk (Dibuat lebih tebal dan teks berwarna biru utama agar mencolok) --}}
+        <a href="{{ route('produk.search') }}" 
+           class="list-group-item list-group-item-action ps-4 border-bottom {{ request()->is('produk/search') ? 'bg-body-secondary text-primary fw-bold shadow-inner' : 'text-muted' }}"
+           style="background-color: #e9ecef !important;">
+            <i class="fas fa-search me-2 text-primary"></i><span class="text-primary">Cari Produk</span>
         </a>
     @endsection
 @endsection
 
 @section('content')
+<!-- KODE KONTEN SEPERTI SEBELUMNYA (TIDAK ADA PERUBAHAN DI SINI) -->
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 mb-0 text-gray-800">Cari Produk</h1>

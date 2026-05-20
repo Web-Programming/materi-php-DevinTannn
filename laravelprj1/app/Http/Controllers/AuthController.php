@@ -15,7 +15,7 @@ class AuthController extends Controller
     public function registerForm()
     {
         // FIX: Menyesuaikan jalur view ke folder App/dashboard
-        return view('App.dashboard.register', ['title' => 'Daftar Akun']);
+        return view('dashboard.register', ['title' => 'Daftar Akun']);
     }
 
     // Proses simpan user baru
@@ -45,7 +45,7 @@ class AuthController extends Controller
     public function loginForm()
     {
         // FIX: Menyesuaikan jalur view ke folder App/dashboard
-        return view('App.dashboard.login', ['title' => 'Login']);
+        return view('dashboard.login', ['title' => 'Login']);
     }
 
     // Proses autentikasi pengguna

@@ -5,9 +5,11 @@
 @section('sidebar')
     @parent
     @section('submenu-produk')
+    @can('create-products')
         <a href="{{ route('produk.create') }}" class="list-group-item list-group-item-action ps-4 {{ request()->is('produk/create') ? 'active' : '' }}">
             <i class="fas fa-plus-circle me-2"></i>Tambah Produk
         </a>
+    @endcan
         <a href="{{ route('produk.search') }}" class="list-group-item list-group-item-action ps-4 {{ request()->is('produk/search') ? 'active' : '' }}">
             <i class="fas fa-search me-2"></i>Cari Produk
         </a>
@@ -15,12 +17,16 @@
 @endsection
 
 @section('content')
+
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 mb-0 text-gray-800">{{ $title }}</h1>
+        {{-- Tombol Tambah di bagian atas tabel --}}
+    @can('create-products')
         <a href="{{ route('produk.create') }}" class="btn btn-primary shadow-sm">
             <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Produk Baru
         </a>
+    @endcan
     </div>
 
     @if(session('success'))
@@ -39,9 +45,9 @@
                             <th width="50">No</th>
                             <th>Nama Produk</th>
                             <th>Harga</th>
-                            <th>Stok</th> {{-- Tambahan Header Kolom Stok --}}
+                            <th>Stok</th>
                             <th>Status</th> 
-                            <th width="200" class="text-center">Aksi</th>
+                            <th width="280" class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -50,12 +56,8 @@
                             <td>{{ ($products->currentPage() - 1) * $products->perPage() + $loop->iteration }}</td>
                             <td>{{ $item->name }}</td>
                             <td>Rp {{ number_format($item->price, 0, ',', '.') }}</td>
-                            
-                            {{-- Menampilkan jumlah stok bawaan database --}}
                             <td>{{ $item->stock }} pcs</td>
-                            
                             <td>
-                                {{-- Status otomatis sinkron dengan jumlah stok --}}
                                 @if($item->stock > 0)
                                     <span class="badge bg-success">Tersedia</span>
                                 @else
@@ -64,12 +66,17 @@
                             </td>
                             <td class="text-center">
                                 <div class="btn-group" role="group">
+                                    {{-- Tombol Detail --}}
                                     <a href="{{ route('produk.show', $item->id) }}" class="btn btn-sm btn-info text-white">
                                         <i class="fas fa-eye"></i> Detail
                                     </a>
+                                    
+                                    {{-- Tombol Edit --}}
                                     <a href="{{ route('produk.edit', $item->id) }}" class="btn btn-sm btn-primary">
                                         <i class="fas fa-edit"></i> Edit
                                     </a>
+
+                                    {{-- Tombol Hapus --}}
                                     <form action="{{ route('produk.destroy', $item->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
@@ -82,7 +89,6 @@
                         </tr>
                         @empty
                         <tr>
-                            {{-- Colspan diubah ke 6 karena sekarang total ada 6 kolom di bagian atas --}}
                             <td colspan="6" class="text-center py-4 text-muted">Data produk tidak ditemukan.</td>
                         </tr>
                         @endforelse
@@ -95,6 +101,7 @@
                     Menampilkan {{ $products->firstItem() ?? 0 }} sampai {{ $products->lastItem() ?? 0 }} dari {{ $products->total() }} produk
                 </small>
                 <div>
+                    {{-- Navigasi Pagination --}}
                     {{ $products->links() }}
                 </div>
             </div>

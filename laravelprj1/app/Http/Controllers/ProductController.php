@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
 {
@@ -38,6 +39,8 @@ class ProductController extends Controller
      */
     public function create() 
     {
+        Gate::authorize('create-products');
+        
         $title = "Tambah Produk";
         return view('produk.create', compact('title'));
     }
@@ -150,15 +153,17 @@ class ProductController extends Controller
         $title = 'Pencarian Produk';
         $keyword = $request->get('keyword');
 
+        // Mulai query dasar ke tabel products
+        $query = DB::table('products');
+
+        // FIX: Jika ada keyword dari navbar / form, jalankan query filter nama
         if ($keyword) {
-            $products = DB::table('products')
-                ->where('name', 'like', "%" . $keyword . "%")
-                ->paginate(10)
-                ->withQueryString();
-        } else {
-            $products = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+            $query->where('name', 'like', "%" . $keyword . "%");
         }
+
+        // Ambil data menggunakan pagination (Jika keyword kosong, akan menampilkan seluruh produk)
+        $products = $query->paginate(10)->withQueryString();
 
         return view('produk.search', compact('title', 'products'));
     }
-}
+}   

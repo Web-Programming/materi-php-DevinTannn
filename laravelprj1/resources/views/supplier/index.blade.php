@@ -5,10 +5,15 @@
 @section('sidebar')
     @parent
     @section('submenu-supplier')
-        <a href="{{ route('supplier.create') }}" class="list-group-item list-group-item-action ps-4 {{ request()->is('supplier/create') ? 'active' : '' }}">
+        {{-- Sub-menu Tambah Supplier (Berwarna abu-abu + border saat aktif) --}}
+        <a href="{{ route('supplier.create') }}" 
+           class="list-group-item list-group-item-action ps-4 border-bottom {{ request()->is('supplier/create') ? 'bg-secondary bg-opacity-10 text-dark fw-bold' : 'text-muted' }}">
             <i class="fas fa-plus-circle me-2"></i>Tambah Supplier
         </a>
-        <a href="{{ route('supplier.search') }}" class="list-group-item list-group-item-action ps-4 {{ request()->is('supplier/search') ? 'active' : '' }}">
+        
+        {{-- Sub-menu Cari Supplier (Berwarna abu-abu + border saat aktif) --}}
+        <a href="{{ route('supplier.search') }}" 
+           class="list-group-item list-group-item-action ps-4 border-bottom {{ request()->is('supplier/search') ? 'bg-secondary bg-opacity-10 text-dark fw-bold' : 'text-muted' }}">
             <i class="fas fa-search me-2"></i>Cari Supplier
         </a>
     @endsection

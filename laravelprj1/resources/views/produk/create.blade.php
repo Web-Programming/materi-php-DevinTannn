@@ -5,11 +5,22 @@
 @section('sidebar')
     @parent
     @section('submenu-produk')
-        <a href="{{ route('produk.create') }}" class="list-group-item list-group-item-action ps-4 {{ request()->is('produk/create') ? 'active' : '' }}">
-            <i class="fas fa-plus-circle me-2"></i>Tambah Produk
-        </a>
-        <a href="{{ route('produk.search') }}" class="list-group-item list-group-item-action ps-4 {{ request()->is('produk/search') ? 'active' : '' }}">
-            <i class="fas fa-search me-2"></i>Cari Produk
+        {{-- Sub-menu Tambah Produk (Otomatis Aktif: Abu-abu dengan Teks Biru Utama) --}}
+        @can('create-products')
+            <a href="{{ route('produk.create') }}" 
+               class="list-group-item list-group-item-action ps-4 border-bottom {{ request()->is('produk/create') ? 'bg-body-secondary text-primary fw-bold' : 'text-muted' }}"
+               style="{{ request()->is('produk/create') ? 'background-color: #e9ecef !important;' : '' }}">
+                <i class="fas fa-plus-circle me-2 {{ request()->is('produk/create') ? 'text-primary' : '' }}"></i>
+                <span class="{{ request()->is('produk/create') ? 'text-primary' : '' }}">Tambah Produk</span>
+            </a>
+        @endcan
+
+        {{-- Sub-menu Cari Produk (Normal/Muted jika sedang di halaman create) --}}
+        <a href="{{ route('produk.search') }}" 
+           class="list-group-item list-group-item-action ps-4 border-bottom {{ request()->is('produk/search') ? 'bg-body-secondary text-primary fw-bold' : 'text-muted' }}"
+           style="{{ request()->is('produk/search') ? 'background-color: #e9ecef !important;' : '' }}">
+            <i class="fas fa-search me-2 {{ request()->is('produk/search') ? 'text-primary' : '' }}"></i>
+            <span class="{{ request()->is('produk/search') ? 'text-primary' : '' }}">Cari Produk</span>
         </a>
     @endsection
 @endsection

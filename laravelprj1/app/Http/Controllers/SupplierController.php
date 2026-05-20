@@ -91,7 +91,7 @@ class SupplierController extends Controller
             abort(404);
         }
 
-        return view('supplier.show', compact('title', 'supplier'));
+        return view('supplier.detail', compact('title', 'supplier'));
     }
 
     /**

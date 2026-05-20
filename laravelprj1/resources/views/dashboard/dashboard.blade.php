@@ -89,9 +89,11 @@
     <div class="card shadow-sm">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">5 Product Terbaru</h5>
+            @can('create-products')
             <a href="{{ url('/produk/create') }}" class="btn btn-primary btn-sm">
                 <i class="bi bi-plus-lg me-1"></i>Tambah Product
             </a>
+            @endcan
         </div>
         <div class="card-body p-0">
             <table class="table table-hover mb-0">

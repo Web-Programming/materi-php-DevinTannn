@@ -27,7 +27,7 @@ class DashboardController extends Controller
         $productTerbaru = Product::latest()->take(5)->get();
 
         // 6. Mengirim data ke view dashboard
-        return view('App.dashboard.dashboard', compact(
+        return view('dashboard.dashboard', compact(
             'totalProduct',
             'productTersedia',
             'productHabis',

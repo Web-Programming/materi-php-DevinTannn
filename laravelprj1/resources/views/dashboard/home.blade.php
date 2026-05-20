@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selamat Datang - Aplikasi Penjualan</title>
+    <title>Selamat Datang - PT.Tandjungan</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
@@ -11,7 +11,7 @@
 
     <nav class="navbar navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="/"><i class="bi bi-shop me-2"></i>Aplikasi Penjualan</a>
+            <a class="navbar-brand" href="/"><i class="bi bi-shop me-2"></i>PT.Tandjungan</a>
             <div>
                 @auth
                     <a href="{{ url('/dashboard') }}" class="btn btn-outline-light btn-sm me-2">Dashboard</a>
@@ -31,7 +31,7 @@
                 @endif
 
                 <i class="bi bi-shop display-1 text-primary"></i>
-                <h1 class="mt-3 fw-bold">Aplikasi Penjualan</h1>
+                <h1 class="mt-3 fw-bold">PT.Tandjungan</h1>
                 <p class="lead text-muted mt-2">Kelola data barang, pesanan, dan laporan penjualan dengan mudah.</p>
                 
                 <div class="mt-4 d-flex justify-content-center gap-3">
@@ -79,7 +79,7 @@
     </div>
 
     <footer class="text-center text-muted mt-5 py-4 border-top">
-        &copy; {{ date('Y') }} Aplikasi Penjualan. All rights reserved.
+        &copy; {{ date('Y') }} PT.Tandjungan. All rights reserved.
     </footer>
 
 </body>

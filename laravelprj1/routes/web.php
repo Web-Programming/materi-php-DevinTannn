@@ -104,7 +104,7 @@ Route::get('/profil', function(){
 // ==================== HOME (LANDING PAGE) ====================
 // FIX: Mengembalikan view Landing Page langsung agar tidak dilempar ke login
 Route::get('/', function () {
-    return view('App.dashboard.home'); 
+    return view('dashboard.home'); 
 })->name('home');
 
 // ==================== ROUTE AUTHENTIKASI ====================

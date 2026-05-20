@@ -5,11 +5,20 @@
 @section('sidebar')
     @parent
     @section('submenu-supplier')
-        <a href="{{ route('supplier.create') }}" class="list-group-item list-group-item-action ps-4 {{ request()->is('supplier/create') ? 'active' : '' }}">
-            <i class="fas fa-plus-circle me-2"></i>Tambah Supplier
+        {{-- Sub-menu Tambah Supplier (Otomatis Aktif: Abu-abu dengan Teks Biru Utama) --}}
+        <a href="{{ route('supplier.create') }}" 
+           class="list-group-item list-group-item-action ps-4 border-bottom {{ request()->is('supplier/create') ? 'bg-body-secondary text-primary fw-bold' : 'text-muted' }}"
+           style="{{ request()->is('supplier/create') ? 'background-color: #e9ecef !important;' : '' }}">
+            <i class="fas fa-plus-circle me-2 {{ request()->is('supplier/create') ? 'text-primary' : '' }}"></i>
+            <span class="{{ request()->is('supplier/create') ? 'text-primary' : '' }}">Tambah Supplier</span>
         </a>
-        <a href="{{ route('supplier.search') }}" class="list-group-item list-group-item-action ps-4 {{ request()->is('supplier/search') ? 'active' : '' }}">
-            <i class="fas fa-search me-2"></i>Cari Supplier
+
+        {{-- Sub-menu Cari Supplier (Normal/Muted jika sedang di halaman create) --}}
+        <a href="{{ route('supplier.search') }}" 
+           class="list-group-item list-group-item-action ps-4 border-bottom {{ request()->is('supplier/search') ? 'bg-body-secondary text-primary fw-bold' : 'text-muted' }}"
+           style="{{ request()->is('supplier/search') ? 'background-color: #e9ecef !important;' : '' }}">
+            <i class="fas fa-search me-2 {{ request()->is('supplier/search') ? 'text-primary' : '' }}"></i>
+            <span class="{{ request()->is('supplier/search') ? 'text-primary' : '' }}">Cari Supplier</span>
         </a>
     @endsection
 @endsection
